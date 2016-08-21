@@ -9,6 +9,11 @@ public class Ball : MonoBehaviour {
     public static int enemyScore = 0;
 	public Text playerText;
 	public Text enemyText;
+	public AudioSource[] source;
+	//public AudioSource boundsAudio;
+	//public AudioSource goalAudio;
+	//public AudioSource racketAudio;
+
 
     Rigidbody2D rb;
 
@@ -18,6 +23,7 @@ public class Ball : MonoBehaviour {
 		rb.velocity = Vector2.right * ballSpeed;
 		updateScore (playerText, 0);
 		updateScore (enemyText, 0);
+		source = GetComponents<AudioSource>();
 	}
 
 
@@ -28,23 +34,33 @@ public class Ball : MonoBehaviour {
 		//   col.transform.position is the racket's position
 		//   col.collider is the racket's collider
 
+		// play a sound when ball hits upper or lower walls
+		if (col.gameObject.name == "topBounds" || col.gameObject.name == "bottomBounds") {
+			source [2].Play ();
+		}
+			
+
 		// Hit the left Racket?
 		if (col.gameObject.name == "Player") {
+			source [3].Play ();
 			//Debug.Log ("Player");
 			hitBall(1, col);
 		}
 
 		// Hit the right Racket?
 		if (col.gameObject.name == "Enemy") {
+			source [3].Play ();
 			//Debug.Log ("Enemy");
 			hitBall(-1, col);
 		}			
 
 		// keep score
 		if (col.gameObject.name == "leftGoal") {
+			source [1].Play ();
 			updateScore (enemyText, ++enemyScore);
 		}
 		if (col.gameObject.name == "rightGoal") {			
+			source [0].Play ();
 			updateScore (playerText, ++playerScore);
 		}
 
